@@ -16,7 +16,7 @@ git clone https://github.com/MUTUEL/MCNetwork.git
 git clone https://github.com/mfem/mfem.git
 mkdir mfem-build && cd mfem-build
 cmake ../mfem
-make ../mfem
+make
 mkdir ../MCNetwork/build && cd ../MCNetwork/build
 env MFEM_DIR=../../mfem-build cmake ..
 make
