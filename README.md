@@ -2,7 +2,7 @@
 
 This code uses a Kinetic Monte Carlo simulation to estimate the behaviour of variable range hopping in Dopant Networks. More information can be found [here](https://www.researchsquare.com/article/rs-757616/latest.pdf).
 
-## Installation
+## Installation (with root)
 This installation guide has been written using Ubuntu on WSL2 (Windows Subsystem for Linux), but should be usable on a range of linux operating systems.
 
 Install the dependencies through apt (for Ubuntu/Debian):
@@ -27,6 +27,31 @@ Set up your conda environment (assuming you have anaconda installed already):
 conda create --name mcnetwork numpy scipy matplotlib h5py
 conda activate mcnetwork
 ```
+
+## Installation (without root)
+On systems without libhdf5 and no root one has to manually include libhdf5.
+
+Note: Replace the HDF download link by the appropriate CMake version, which can be found [here](https://portal.hdfgroup.org/display/support/Downloads).
+```bash
+git clone https://github.com/MUTUEL/MCNetwork.git
+git clone https://github.com/mfem/mfem.git
+mkdir mfem-build && cd mfem-build
+cmake ../mfem
+make ../mfem
+
+wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.N/hdf5-1.N.N/src/<distribution>.tar.gz
+gzip -cd <distribution>.tar.gz | tar xvf -
+cd CMake-hdf5-<version>
+./build-unix.sh
+cp HDF5-<version>-Linux.tar.gz ..
+cd ..
+tar -xvf HDF5-<version>-Linux.tar.gz
+
+mkdir MCNetwork/build && cd MCNetwork/build
+env MFEM_DIR=../../mfem-build  HDF5_DIR=../../HDF5-<version>-Linux/HDF_Group/HDF5/<version>/share/cmake/hdf5 cmake ..
+make
+```
+These install instruction have been adapted from the [HDF5 Building with CMake manual](https://portal.hdfgroup.org/display/support/Building+HDF5+with+CMake).
 
 ## Usage
 Define the device parameters you want to use in `data/in.txt`. To make a new device with Monte Carlo optimization and random voltages go to the `data` folder in your shell and enter the following command:
